@@ -74,7 +74,7 @@ if __name__ == '__main__':
     g = thom.get_nfa()
     print(g)
     print(g.start_state)
-    Draw(g).draw()
+    draw()
     dfa_graph = NfaToDfa(g).get_dfa()
     print(dfa_graph)
     # if stack.front() != '|' != '(' != ')':

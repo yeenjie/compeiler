@@ -8,15 +8,19 @@ def debug(teller):
 
 
 class Thompson:
-    stack = Stack()
-    graph = Graph()
-    add_endnode = False
-    end_position = -1
+
 
     def __init__(self, str):
-    def __init__(self, str):
+        self.stack = Stack()
+        self.graph = Graph()
+        self.add_endnode = False
+        self.end_position = -1
         for c in str:
-            self.graph.characters.append(c)
+            if c != '(' and c != ')' and c != '|' and c != '*':
+                if c in self.graph.characters:
+                    pass
+                else:
+                    self.graph.characters.append(c)
             self.stack.push(c)
         if self.stack.front() == ')' and self.stack.front() == '*':
             self.add_endnode = True
@@ -38,7 +42,7 @@ class Thompson:
                 # 创建分支节点（结束点）
                 end_node = self.graph.get_new_state()
                 connect_point = end_node
-                debug("创建结束分支节点" + str(end_node))
+                # debug("创建结束分支节点" + str(end_node))
 
                 # 保存结束状态(整体)
                 if self.add_endnode and self.end_position != -1:
@@ -76,24 +80,24 @@ class Thompson:
                 if self.stack.front() == ')':
                     self.stack.pop()  # 在这里进入循环免得多进一次
                 inner_end = self.scan(self.graph.get_new_state())  # (创建一个新的开始节点)
-                debug("得到的连接点" + str(inner_end))
+                # debug("得到的连接点" + str(inner_end))
                 inner_begin = self.graph.get_now_state()  # 保存内部开始节点
                 # 内部附加连接
-                edge = Edge(inner_end, inner_begin, weight="内部附加连接")
-                # edge = Edge(inner_end, inner_begin, weight="@")
+                # edge = Edge(inner_end, inner_begin, weight="内部附加连接")
+                edge = Edge(inner_end, inner_begin, weight="@")
                 self.graph.add_edge(edge)
                 # 内部节点连接结束节点
-                edge = Edge(inner_end, save_state, weight="内部节点连接结束节点")
-                # edge = Edge(inner_end, save_state, weight="@")
+                # edge = Edge(inner_end, save_state, weight="内部节点连接结束节点")
+                edge = Edge(inner_end, save_state, weight="@")
                 self.graph.add_edge(edge)
                 # 初始节点连接结束节点
                 new_node = self.graph.get_new_state()
-                # edge = Edge(new_node, save_state, "@")
-                edge = Edge(new_node, save_state, "初始节点连接结束节点")
+                edge = Edge(new_node, save_state, "@")
+                # edge = Edge(new_node, save_state, "初始节点连接结束节点")
                 self.graph.add_edge(edge)
                 # 初始连接连接内部开始节点
-                # edge = Edge(new_node, inner_begin, "@")
-                edge = Edge(new_node, inner_begin, "初始连接连接内部开始节点")
+                edge = Edge(new_node, inner_begin, "@")
+                # edge = Edge(new_node, inner_begin, "初始连接连接内部开始节点")
                 self.graph.add_edge(edge)
             else:
                 edge = Edge(self.graph.get_new_state(), self.graph.get_now_state() - 1, scaner)
